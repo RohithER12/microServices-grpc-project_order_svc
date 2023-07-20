@@ -5,4 +5,5 @@ type Order struct {
 	Price     int64 `json:"price"`
 	ProductId int64 `json:"product_id"`
 	UserId    int64 `json:"user_id"`
+	Quantity  int64 `json:"quantity"`
 }

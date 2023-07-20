@@ -9,7 +9,10 @@ import (
 	"github.com/RohithER12/order-svc/pkg/config"
 	"github.com/RohithER12/order-svc/pkg/db"
 	"github.com/RohithER12/order-svc/pkg/pb"
+	"github.com/RohithER12/order-svc/pkg/repo"
+	orderinterface "github.com/RohithER12/order-svc/pkg/repo/orderInterface"
 	service "github.com/RohithER12/order-svc/pkg/services"
+	"github.com/google/wire"
 	"google.golang.org/grpc"
 )
 
@@ -36,9 +39,11 @@ func main() {
 
 	fmt.Println("Order Svc on", c.Port)
 
+	order := InitializeOrderImpl(&h)
 	s := service.Server{
 		H:          h,
 		ProductSvc: productSvc,
+		Order:      order,
 	}
 
 	grpcServer := grpc.NewServer()
@@ -47,5 +52,12 @@ func main() {
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalln("Failed to serve:", err)
+	}
+}
+
+func InitializeOrderImpl(h *db.Handler) orderinterface.Order {
+	wire.Build(orderinterface.NewOrderImpl)
+	return &repo.OrderRepo{
+		H: *h,
 	}
 }

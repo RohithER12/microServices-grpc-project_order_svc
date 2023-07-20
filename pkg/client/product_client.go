@@ -34,10 +34,11 @@ func (c *ProductServiceClient) FindOne(productId int64) (*pb.FindOneResponse, er
 	return c.Client.FindOne(context.Background(), req)
 }
 
-func (c *ProductServiceClient) DecreaseStock(productId int64, orderId int64) (*pb.DecreaseStockResponse, error) {
+func (c *ProductServiceClient) DecreaseStock(productId int64, orderId int64, quantity int64) (*pb.DecreaseStockResponse, error) {
 	req := &pb.DecreaseStockRequest{
-		Id:      productId,
-		OrderId: orderId,
+		Id:       productId,
+		OrderId:  orderId,
+		Quantity: quantity,
 	}
 
 	return c.Client.DecreaseStock(context.Background(), req)
